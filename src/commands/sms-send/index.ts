@@ -60,7 +60,7 @@ export default class TwilloSMSFromCsv extends Command {
   }
 
   static examples = [
-    `$ oex sms-send /Users/amitrahav/OtherProjects/twillo-sms-from-csv/approve.csv XXXX XXXX  -c0
+    `$ oex sms-send /Users/me/users.csv XXXX XXXX  -c0
     SENT! (./src/commands/hello/index.ts)`,
   ]
 
@@ -72,7 +72,7 @@ export default class TwilloSMSFromCsv extends Command {
 
   prefixPhoneNums(csvData:Record<string, string>[], header: string): Record<string, string>[] {
     return csvData.filter(data => data[header] !== '').map(data => {
-      data[header] = `972${data[header]}`
+      data[header] = `+972${data[header].replace('-', '').replace(' ', '')}`
       return data
     })
   }
@@ -83,6 +83,7 @@ export default class TwilloSMSFromCsv extends Command {
       fs.createReadStream(file)
       .pipe(csv.parse({headers: true}))
       .on('error', error => {
+        console.log(`Failed ${error.message}`)
         return reject(error.message)
       })
       .on('data', row => dataRows.push(row))
@@ -93,17 +94,27 @@ export default class TwilloSMSFromCsv extends Command {
     })
   }
 
-  async sendSMS(sid: string, auth: string, data: Record<string, string>[], header: string, from: string): Promise<void> {
+  async sendSMS(sid: string, auth: string, data: Record<string, string>[], header: string, from: string, body: string): Promise<void> {
     const client = twilio(sid, auth)
 
-    for (const rec of data) {
-      client.messages
-      .create({
-        body: ' ההאקתון קורה ביום רביעי, אשרי לנו הגעה בלינק: https://tinyurl.com/4ucj7zyf',
-        to: rec[header], // Text this number
-        from: from, // From a valid Twilio number
+    for await (const rec of data) {
+      // eslint-disable-next-line no-new
+      new Promise(resolve => {
+        client.messages
+        .create({
+          body,
+          to: rec[header], // Text this number
+          from: from, // From a valid Twilio number
+        })
+        .then(message => {
+          console.log(`SENT to ${rec[header]} - messageID: ${message.sid}`)
+          resolve(message.sid)
+        })
+        .catch(error => {
+          console.error(error)
+          resolve(error)
+        })
       })
-      .then(message => console.log(message.sid))
     }
   }
 
@@ -112,6 +123,6 @@ export default class TwilloSMSFromCsv extends Command {
     const dataRows = await this.csvRead(args['csv-file'])
     const header = this.getHeaderName(dataRows[0], flags)
     const prefixPhones = this.prefixPhoneNums(dataRows, header)
-    await this.sendSMS(args['twillo-sid'], args['twillo-auth'], prefixPhones, header, args['twillo-from'])
+    await this.sendSMS(args['twillo-sid'], args['twillo-auth'], prefixPhones, header, args['twillo-from'], args.message)
   }
 }

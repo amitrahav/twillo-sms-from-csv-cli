@@ -22,7 +22,7 @@
     "@oclif/plugin-plugins": "^2.0.1",
     "fast-csv": "^4.3.6",
     "install": "^0.13.0",
-    "twilio": "^3.76.1"
+    "twilio": "^3.77.1"
   },
   "devDependencies": {
     "@oclif/test": "^2",

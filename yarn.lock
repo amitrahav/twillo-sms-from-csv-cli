@@ -5009,10 +5009,10 @@ tunnel-agent@^0.6.0:
   dependencies:
     safe-buffer "^5.0.1"
 
-twilio@^3.76.1:
-  version "3.76.1"
-  resolved "https://registry.yarnpkg.com/twilio/-/twilio-3.76.1.tgz#fe2dea52dd6fb36bc119a04d9b0732be40d00d57"
-  integrity sha512-/hHTn+XfjG6FEDXeOpOGJO9XzyP5zpDBalZ4g75stAsP0T/yHlGPokfrhKZjQoOZNzeE9UiQfDq2yvcQHXjDfQ==
+twilio@^3.77.1:
+  version "3.77.1"
+  resolved "https://registry.yarnpkg.com/twilio/-/twilio-3.77.1.tgz#4550e3bd227c1b63761691f7816c22d86db4dcce"
+  integrity sha512-0G8HMwIwc7Wq2x7CdMIqjOE3/XXCwu2jnERXRCaLJTpDIi6CxVkaM9W8iCAyuISb3bPjvON+RWpLcDbTDARiTQ==
   dependencies:
     axios "^0.26.1"
     dayjs "^1.8.29"

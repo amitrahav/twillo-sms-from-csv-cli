@@ -19,7 +19,7 @@
   "dependencies": {
     "@oclif/core": "^1",
     "@oclif/plugin-help": "^5",
-    "@oclif/plugin-plugins": "^2.0.1",
+    "@oclif/plugin-plugins": "^2.1.11",
     "fast-csv": "^4.3.6",
     "install": "^0.13.0",
     "twilio": "^3.76.1"
